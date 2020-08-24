@@ -106,6 +106,7 @@ type ManagerConfig struct {
 	SessionNameInHTTPHeader string `json:"SessionNameInHTTPHeader"`
 	EnableSidInURLQuery     bool   `json:"EnableSidInURLQuery"`
 	SessionIDPrefix         string `json:"sessionIDPrefix"`
+	SameSite                string `json:"sameSite"`
 }
 
 // Manager contains Provider and its configuration.
@@ -236,6 +237,16 @@ func (manager *Manager) SessionStart(w http.ResponseWriter, r *http.Request) (se
 	if manager.config.CookieLifeTime > 0 {
 		cookie.MaxAge = manager.config.CookieLifeTime
 		cookie.Expires = time.Now().Add(time.Duration(manager.config.CookieLifeTime) * time.Second)
+	}
+	if manager.config.SameSite != "" {
+		switch manager.config.SameSite {
+		case "none":
+			cookie.SameSite = http.SameSiteNoneMode
+		case "lax":
+			cookie.SameSite = http.SameSiteLaxMode
+		case "strict":
+			cookie.SameSite = http.SameSiteStrictMode
+		}
 	}
 	if manager.config.EnableSetCookie {
 		http.SetCookie(w, cookie)
