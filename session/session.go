@@ -363,6 +363,9 @@ func (manager *Manager) sessionID() (string, error) {
 
 // Set cookie with https.
 func (manager *Manager) isSecure(req *http.Request) bool {
+	if manager.config.SameSite == "none" || manager.config.SameSite == "strict" {
+		return true
+	}
 	if !manager.config.Secure {
 		return false
 	}
