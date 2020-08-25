@@ -60,6 +60,7 @@ func registerSession() error {
 			conf.EnableSidInHTTPHeader = BConfig.WebConfig.Session.SessionEnableSidInHTTPHeader
 			conf.SessionNameInHTTPHeader = BConfig.WebConfig.Session.SessionNameInHTTPHeader
 			conf.EnableSidInURLQuery = BConfig.WebConfig.Session.SessionEnableSidInURLQuery
+			conf.SameSite = BConfig.WebConfig.Session.SessionSameSite
 		} else {
 			if err = json.Unmarshal([]byte(sessionConfig), conf); err != nil {
 				return err
